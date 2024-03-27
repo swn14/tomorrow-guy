@@ -18,12 +18,12 @@ export class AppComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     setTimeout(async () => {
-      await this.todoService.addTodo({
-        id: crypto.randomUUID(),
-        name: 'Take out trash',
-        description: 'Take out the trash on Thursday nights.',
-        dueDate: this.getNextThursday(),
-      });
+      // await this.todoService.addTodo({
+      //   id: crypto.randomUUID(),
+      //   name: 'Take out trash',
+      //   description: 'Take out the trash on Thursday nights.',
+      //   dueDate: this.getNextThursday(),
+      // });
       this.todos = await this.todoService.getAllTodos();
     }, 5000);
   }
