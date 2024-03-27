@@ -1,0 +1,22 @@
+<div class="flex items-center justify-between border-b border-gray-300 py-2">
+  <div>
+    <input
+      type="checkbox"
+      [checked]="todo.completed"
+      (change)="onMarkAsComplete()"
+      class="mr-2"
+    />
+    <span
+      [class]="todo.completed ? 'line-through text-gray-500' : 'text-gray-700'"
+      >{{ todo.name }}</span
+    >
+    <p class="text-gray-600 text-sm">{{ todo.description }}</p>
+    <p class="text-gray-600 text-sm">Due: {{ todo.dueDate | date }}</p>
+  </div>
+  <button
+    class="text-red-500 hover:text-red-700 focus:outline-none"
+    (click)="onDelete()"
+  >
+    Delete
+  </button>
+</div>

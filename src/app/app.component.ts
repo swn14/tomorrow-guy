@@ -1,31 +1,33 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TodoService } from './services/todo.service';
 import { ITodo } from './models/ITodo';
-import { JsonPipe } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
+import { Observable } from 'rxjs';
+import { TodoComponent } from './components/todo.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, JsonPipe],
+  imports: [RouterOutlet, JsonPipe, AsyncPipe, TodoComponent, NgFor, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
   title = 'tomorrow-guy';
   todoService = inject(TodoService);
-  public todos: ITodo[] = [];
+  cdr = inject(ChangeDetectorRef);
+  public todos$!: Observable<ITodo[]>;
 
-  async ngOnInit(): Promise<void> {
-    setTimeout(async () => {
-      // await this.todoService.addTodo({
-      //   id: crypto.randomUUID(),
-      //   name: 'Take out trash',
-      //   description: 'Take out the trash on Thursday nights.',
-      //   dueDate: this.getNextThursday(),
-      // });
-      this.todos = await this.todoService.getAllTodos();
-    }, 5000);
+  ngOnInit() {
+    this.todoService.initialize().subscribe(() => {
+      this.todos$ = this.todoService.getAllTodos();
+    });
+  }
+
+  onTodoDeleted(id: number) {
+    this.todoService.deleteTodo(id);
+    this.todos$ = this.todoService.getAllTodos();
   }
 
   getNextThursday(): Date {

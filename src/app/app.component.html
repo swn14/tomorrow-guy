@@ -1,3 +1,16 @@
-<h1 class="text-3xl font-bold underline">Hello world!</h1>
+<div class="container mx-auto">
+  <h1 class="text-3xl font-bold underline">Tomorrow Guy!</h1>
 
-{{ todos | json }}
+  <app-todo
+    *ngFor="let todo of todos$ | async"
+    [todo]="todo"
+    (delete)="onTodoDeleted($event)"
+  ></app-todo>
+  <div
+    *ngIf="!(todos$ | async) || (todos$ | async)?.length === 0"
+    class="max-w-md mx-auto"
+  >
+    <!-- Display a message when the list is empty -->
+    <p class="text-center text-gray-500 mt-4">No todos found.</p>
+  </div>
+</div>

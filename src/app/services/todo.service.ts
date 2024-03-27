@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ITodo } from '../models/ITodo';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,34 +11,38 @@ export class TodoService {
   private dbVersion: number = 1;
   private db!: IDBDatabase;
 
-  constructor() {
-    this.connectToDatabase();
-  }
+  // constructor() {
+  //   this.connectToDatabase().then((result: IDBDatabase) => {
+  //     this.db = result;
+  //   });
+  // }
 
-  private connectToDatabase() {
-    const request = window.indexedDB.open(this.dbName, this.dbVersion);
+  initialize(): Observable<void> {
+    return new Observable<void>((observer) => {
+      const request = window.indexedDB.open(this.dbName, this.dbVersion);
 
-    request.onerror = (event) => {
-      console.error(
-        'IndexedDB connection error:',
-        (event.target as any)?.error
-      );
-    };
+      request.onerror = () => {
+        console.error('IndexedDB failed to open.');
+        observer.error();
+      };
 
-    request.onsuccess = (event) => {
-      console.log('Connected to IndexedDB', event);
-      this.db = (event.target as any).result;
-    };
+      request.onsuccess = () => {
+        this.db = request.result;
+        console.log('IndexedDB opened successfully.');
+        observer.next();
+        observer.complete();
+      };
 
-    request.onupgradeneeded = (event) => {
-      const db = request.result;
-      const store = db.createObjectStore(this.collectionName, {
-        keyPath: 'id',
-        autoIncrement: true,
-      });
-      store.createIndex('name', 'name', { unique: false });
-      console.log('IndexedDB upgrade complete');
-    };
+      request.onupgradeneeded = (event: any) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains(this.collectionName)) {
+          db.createObjectStore(this.collectionName, {
+            keyPath: 'id',
+            autoIncrement: true,
+          });
+        }
+      };
+    });
   }
 
   addTodo(todo: ITodo): void {
@@ -56,8 +61,8 @@ export class TodoService {
     };
   }
 
-  getAllTodos(): Promise<any[]> {
-    return new Promise((resolve, reject) => {
+  getAllTodos(): Observable<ITodo[]> {
+    return new Observable<ITodo[]>((observer) => {
       const transaction = this.db.transaction(
         [this.collectionName],
         'readonly'
@@ -67,12 +72,12 @@ export class TodoService {
 
       request.onerror = (event) => {
         console.error('Error fetching items:', (event.target as any).error);
-        reject((event.target as any).error);
+        observer.error((event.target as any).error);
       };
 
       request.onsuccess = (event) => {
         console.log('Items fetched successfully');
-        resolve(request.result);
+        observer.next(request.result);
       };
     });
   }
