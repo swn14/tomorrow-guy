@@ -46,7 +46,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           name: github-pages
-          path: "./dist/tomorrow-guy/browser"
+          path: "./docs/tomorrow-guy/browser"
   deploy:
     needs: build
     environment:
