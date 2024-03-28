@@ -48,6 +48,7 @@ jobs:
           name: github-pages
           path: "./dist/tomorrow-guy/browser"
   deploy:
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
