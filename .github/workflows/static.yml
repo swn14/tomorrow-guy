@@ -38,24 +38,22 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Build Angular app
-        run: npm run build -- --base-href=/tomorrow-guy/
+        run: npm run build -- --output-path docs --base-href /tomorrow-guy/
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: ${{ GITHUB_SHA }}
+          name: github-pages
           path: "./dist/tomorrow-guy/browser"
   deploy:
     needs: build
     environment:
-      name: ${{ GITHUB_SHA }}
+      name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          name: ${{ GITHUB_SHA }}
