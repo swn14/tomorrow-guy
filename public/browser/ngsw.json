@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1711588514179,
+  "timestamp": 1711589013548,
   "index": "/tomorrow-guy/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/tomorrow-guy/favicon.ico",
         "/tomorrow-guy/index.html",
-        "/tomorrow-guy/main-XPPGJ72I.js",
+        "/tomorrow-guy/main-6LPCI3DZ.js",
         "/tomorrow-guy/manifest.webmanifest",
         "/tomorrow-guy/polyfills-RT5I6R6G.js",
         "/tomorrow-guy/styles-UFHHUZG4.css"
@@ -51,8 +51,8 @@
     "/tomorrow-guy/assets/icons/icon-72x72.png": "aa88a6096bd973be7f6d7a5489bfa6bc2463f8c4",
     "/tomorrow-guy/assets/icons/icon-96x96.png": "7fb8f59c30ce2ff12c700321a0b39e14b3dc8f95",
     "/tomorrow-guy/favicon.ico": "9c39f434fe1261f68c5e3eefdf734630d99c5670",
-    "/tomorrow-guy/index.html": "5eb3c82ec94916f58288818b47d5a79765b451bd",
-    "/tomorrow-guy/main-XPPGJ72I.js": "67502d015ce11ff649bd75558457efd65fb134a1",
+    "/tomorrow-guy/index.html": "c6e8dd0e34e539a48313eb7af6637f6c00eff71c",
+    "/tomorrow-guy/main-6LPCI3DZ.js": "0ee4a16915924fe51c67fb0cfe984dfc7e008947",
     "/tomorrow-guy/manifest.webmanifest": "acb277c50256169eec2439e067338d4e1c5e6e73",
     "/tomorrow-guy/polyfills-RT5I6R6G.js": "fe9f024576f21ff6314cf8f8332cde58b9a12416",
     "/tomorrow-guy/styles-UFHHUZG4.css": "6f6e1cf71fd8c5b431b181dc9d2745510bcfb61f"
