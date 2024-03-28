@@ -45,12 +45,12 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: $GITHUB_SHA
+          name: ${{ GITHUB_SHA }}
           path: "./dist/tomorrow-guy/browser"
   deploy:
     needs: build
     environment:
-      name: $GITHUB_SHA
+      name: ${{ GITHUB_SHA }}
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
@@ -58,4 +58,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          name: $GITHUB_SHA
+          name: ${{ GITHUB_SHA }}
