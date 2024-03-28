@@ -45,7 +45,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: github-pages
+          name: $GITHUB_SHA
           path: "./dist/tomorrow-guy/browser"
   deploy:
     needs: build
@@ -57,3 +57,5 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          name: $GITHUB_SHA
