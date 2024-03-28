@@ -1,16 +1,84 @@
 <div class="container mx-auto">
-  <h1 class="text-3xl font-bold underline">Tomorrow Guy!</h1>
+  <h1 class="text-3xl font-bold">Tomorrow Guy!</h1>
 
-  <app-todo
-    *ngFor="let todo of todos$ | async"
-    [todo]="todo"
-    (delete)="onTodoDeleted($event)"
-  ></app-todo>
-  <div
-    *ngIf="!(todos$ | async) || (todos$ | async)?.length === 0"
-    class="max-w-md mx-auto"
-  >
-    <!-- Display a message when the list is empty -->
-    <p class="text-center text-gray-500 mt-4">No todos found.</p>
+  <div class="grid grid-cols-2 gap-4">
+    <div class="bg-gray-200 p-4">
+      <h3 class="text-xl font-bold">Tomorrow Guy's Problems</h3>
+      <app-todo
+        *ngFor="let todo of todos$ | async"
+        [todo]="todo"
+        (delete)="onTodoDeleted($event)"
+        (toggleComplete)="onTodoMarkedAsCompleted($event)"
+      ></app-todo>
+      <div
+        *ngIf="!(todos$ | async) || (todos$ | async)?.length === 0"
+        class="max-w-md mx-auto"
+      >
+        <!-- Display a message when the list is empty -->
+        <p class="text-center text-gray-500 mt-4">No todos found.</p>
+      </div>
+    </div>
+    <div class="bg-gray-200 p-4">
+      <h3 class="text-xl font-bold">Today Guy's Accomplishments</h3>
+      <app-todo
+        *ngFor="let todo of completedTodos$ | async"
+        [todo]="todo"
+        (delete)="onTodoDeleted($event)"
+        (toggleComplete)="onTodoMarkedAsNotCompleted($event)"
+      ></app-todo>
+      <div
+        *ngIf="
+          !(completedTodos$ | async) || (completedTodos$ | async)?.length === 0
+        "
+        class="max-w-md mx-auto"
+      >
+        <!-- Display a message when the list is empty -->
+        <p class="text-center text-gray-500 mt-4">No todos completed yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden">
+    <form [formGroup]="todoForm" (ngSubmit)="onAddTodo()" class="p-4">
+      <div class="mb-4">
+        <label for="name" class="block text-gray-700 font-bold mb-2"
+          >Name</label
+        >
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          class="appearance-none bg-gray-200 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white"
+        />
+      </div>
+      <div class="mb-4">
+        <label for="description" class="block text-gray-700 font-bold mb-2"
+          >Description</label
+        >
+        <textarea
+          id="description"
+          formControlName="description"
+          rows="3"
+          class="appearance-none bg-gray-200 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white"
+        ></textarea>
+      </div>
+      <div class="mb-4">
+        <label for="dueDate" class="block text-gray-700 font-bold mb-2"
+          >Due Date</label
+        >
+        <input
+          type="date"
+          id="dueDate"
+          formControlName="dueDate"
+          class="appearance-none bg-gray-200 rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:bg-white"
+        />
+      </div>
+      <button
+        type="submit"
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      >
+        Add Todo
+      </button>
+    </form>
   </div>
 </div>

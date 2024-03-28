@@ -48,6 +48,7 @@ export class TodoService {
   addTodo(todo: ITodo): void {
     todo.createdDate = new Date();
     todo.updatedDate = new Date();
+    todo.completed = false;
     const transaction = this.db.transaction([this.collectionName], 'readwrite');
     const objectStore = transaction.objectStore(this.collectionName);
     const request = objectStore.add(todo);

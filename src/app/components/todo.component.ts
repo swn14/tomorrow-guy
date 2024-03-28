@@ -13,10 +13,10 @@ import { ITodo } from '../models/ITodo';
 export class TodoComponent {
   @Input() todo!: ITodo;
   @Output() delete = new EventEmitter<number>();
-  @Output() toggleComplete = new EventEmitter<number>();
+  @Output() toggleComplete = new EventEmitter<ITodo>();
 
   onMarkAsComplete() {
-    this.toggleComplete.emit(this.todo.id);
+    this.toggleComplete.emit(this.todo);
   }
 
   onDelete() {
