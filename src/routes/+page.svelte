@@ -617,7 +617,10 @@
   <footer class="bg-white/10 backdrop-blur-sm border-t border-white/20 mt-12">
     <div class="max-w-6xl mx-auto px-4 py-6 text-center">
       <p class="text-white/80 text-sm">
-        &copy; {today.getFullYear()} Tomorrow Guy - A local-first PWA
+        &copy; {today.getFullYear()} Tomorrow Guy - A local-first PWA - by
+        <a target="_blank" href="https://sheldonnofe-portfolio-14.deno.dev/"
+          >Sheldon Nofer</a
+        >
       </p>
       <div class="mt-2 text-xs text-white/60">
         Status: {isOnline ? "🟢 Online" : "🔴 Offline"} | Tasks: {todayTasks.length +

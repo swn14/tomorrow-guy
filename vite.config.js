@@ -21,8 +21,9 @@ export default defineConfig({
         theme_color: "#667eea",
         background_color: "#ffffff",
         display: "standalone",
-        scope: process.env.NODE_ENV === 'production' ? "/tomorrow-guy/" : "/",
-        start_url: process.env.NODE_ENV === 'production' ? "/tomorrow-guy/" : "/",
+        scope: process.env.NODE_ENV === "production" ? "/tomorrow-guy/" : "/",
+        start_url:
+          process.env.NODE_ENV === "production" ? "/tomorrow-guy/" : "/",
         icons: [
           {
             src: "pwa-192x192.png",
