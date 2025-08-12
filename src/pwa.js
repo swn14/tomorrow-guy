@@ -1,28 +1,27 @@
-import { Workbox } from 'workbox-window';
+// PWA functionality - works with vite-plugin-pwa
+if ("serviceWorker" in navigator) {
+  // The service worker is automatically registered by vite-plugin-pwa
+  // We just need to handle the update logic here
 
-if ('serviceWorker' in navigator) {
-	const wb = new Workbox('/sw.js');
+  window.addEventListener("beforeinstallprompt", (e) => {
+    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    e.preventDefault();
+    // Stash the event so it can be triggered later
+    window.deferredPrompt = e;
+  });
 
-	wb.addEventListener('installed', (event) => {
-		if (event.isUpdate) {
-			// Show update available notification
-			console.log('App updated! Refresh to get the latest version.');
-		} else {
-			// Show app is ready for offline use
-			console.log('App is ready for offline use.');
-		}
-	});
+  // Listen for app installed
+  window.addEventListener("appinstalled", () => {
+    console.log("PWA was installed");
+    window.deferredPrompt = null;
+  });
 
-	wb.addEventListener('waiting', (event) => {
-		// Show update prompt
-		if (confirm('New version available! Click OK to update.')) {
-			wb.messageSkipWaiting();
-		}
-	});
-
-	wb.addEventListener('controlling', (event) => {
-		window.location.reload();
-	});
-
-	wb.register();
+  // Register SW update listener
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.addEventListener("message", (event) => {
+      if (event.data && event.data.type === "SKIP_WAITING") {
+        window.location.reload();
+      }
+    });
+  }
 }
