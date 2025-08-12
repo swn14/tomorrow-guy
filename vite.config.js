@@ -8,6 +8,7 @@ export default defineConfig({
     tailwindcss(),
     sveltekit(),
     VitePWA({
+      outDir: "docs",
       registerType: "autoUpdate",
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest}"],
