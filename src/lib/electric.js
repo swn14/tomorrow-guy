@@ -1,4 +1,23 @@
+// @ts-check
 // Simple IndexedDB wrapper for local-first storage
+
+/** @typedef {Object} Task
+ * @property {string} id
+ * @property {string} title
+ * @property {string} description
+ * @property {boolean} completed
+ * @property {number} created_at
+ * @property {number} updated_at
+ * @property {string} list
+ */
+
+/** @typedef {Object} AppState
+ * @property {string} id
+ * @property {string} last_move_date
+ * @property {number} updated_at
+ */
+
+/** @type {IDBDatabase | null} */
 let db = null;
 const DB_NAME = "tomorrow-guy-db";
 const DB_VERSION = 1;
@@ -17,7 +36,8 @@ export async function initDatabase() {
     };
 
     request.onupgradeneeded = (event) => {
-      const db = event.target.result;
+      /** @type {IDBDatabase} */
+      const db = /** @type {IDBOpenDBRequest} */(event.target)?.result;
 
       // Create tasks table
       if (!db.objectStoreNames.contains("tasks")) {
@@ -38,7 +58,7 @@ export async function getAllTasks() {
   if (!db) throw new Error("Database not initialized");
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["tasks"], "readonly");
+    const transaction = /** @type {IDBDatabase} */(db).transaction(["tasks"], "readonly");
     const store = transaction.objectStore("tasks");
     const request = store.getAll();
 
@@ -50,11 +70,14 @@ export async function getAllTasks() {
   });
 }
 
+/**
+ * @param {Task} task
+ */
 export async function addTask(task) {
   if (!db) throw new Error("Database not initialized");
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["tasks"], "readwrite");
+    const transaction = /** @type {IDBDatabase} */(db).transaction(["tasks"], "readwrite");
     const store = transaction.objectStore("tasks");
     const request = store.add(task);
 
@@ -63,11 +86,14 @@ export async function addTask(task) {
   });
 }
 
+/**
+ * @param {Task} task
+ */
 export async function updateTask(task) {
   if (!db) throw new Error("Database not initialized");
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["tasks"], "readwrite");
+    const transaction = /** @type {IDBDatabase} */(db).transaction(["tasks"], "readwrite");
     const store = transaction.objectStore("tasks");
     const request = store.put(task);
 
@@ -76,11 +102,14 @@ export async function updateTask(task) {
   });
 }
 
+/**
+ * @param {string} id
+ */
 export async function deleteTask(id) {
   if (!db) throw new Error("Database not initialized");
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["tasks"], "readwrite");
+    const transaction = /** @type {IDBDatabase} */(db).transaction(["tasks"], "readwrite");
     const store = transaction.objectStore("tasks");
     const request = store.delete(id);
 
@@ -89,11 +118,14 @@ export async function deleteTask(id) {
   });
 }
 
+/**
+ * @param {string} id
+ */
 export async function getAppState(id) {
   if (!db) throw new Error("Database not initialized");
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["app_state"], "readonly");
+    const transaction = /** @type {IDBDatabase} */(db).transaction(["app_state"], "readonly");
     const store = transaction.objectStore("app_state");
     const request = store.get(id);
 
@@ -102,11 +134,14 @@ export async function getAppState(id) {
   });
 }
 
+/**
+ * @param {AppState} state
+ */
 export async function setAppState(state) {
   if (!db) throw new Error("Database not initialized");
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(["app_state"], "readwrite");
+    const transaction = /** @type {IDBDatabase} */(db).transaction(["app_state"], "readwrite");
     const store = transaction.objectStore("app_state");
     const request = store.put(state);
 

@@ -1,3 +1,4 @@
+// @ts-check
 import { writable } from "svelte/store";
 import {
   initDatabase,
@@ -9,8 +10,24 @@ import {
   setAppState,
 } from "./electric.js";
 
+/** @typedef {Object} Task
+ * @property {string} id
+ * @property {string} title
+ * @property {string} description
+ * @property {boolean} completed
+ * @property {number} created_at
+ * @property {number} updated_at
+ * @property {string} list
+ */
+
+/** @typedef {Object} AppState
+ * @property {string} id
+ * @property {string} last_move_date
+ * @property {number} updated_at
+ */
+
 // Reactive stores
-export const tasks = writable([]);
+export const tasks = writable(/** @type {Task[]} */([]));
 export const isDbReady = writable(false);
 
 let isInitialized = false;
@@ -46,6 +63,10 @@ async function loadTasks() {
 }
 
 // Task operations
+/**
+ * @param {string} title
+ * @param {string} description
+ */
 export async function addTodayGuyTask(title, description = "") {
   try {
     const task = {
@@ -65,6 +86,10 @@ export async function addTodayGuyTask(title, description = "") {
   }
 }
 
+/**
+ * @param {string} title
+ * @param {string} description
+ */
 export async function addTomorrowGuyTask(title, description = "") {
   try {
     const task = {
@@ -84,10 +109,13 @@ export async function addTomorrowGuyTask(title, description = "") {
   }
 }
 
+/**
+ * @param {string} id
+ */
 export async function toggleTask(id) {
   try {
     const currentTasks = await getAllTasks();
-    const task = currentTasks.find((t) => t.id === id);
+    const task = currentTasks.find(/** @param {Task} t */ (t) => t.id === id);
 
     if (task) {
       task.completed = !task.completed;
@@ -100,6 +128,9 @@ export async function toggleTask(id) {
   }
 }
 
+/**
+ * @param {string} id
+ */
 export async function deleteTask(id) {
   try {
     await dbDeleteTask(id);
@@ -110,10 +141,13 @@ export async function deleteTask(id) {
 }
 
 // Move a single task to Tomorrow Guy
+/**
+ * @param {string} taskId
+ */
 export async function moveTaskToTomorrowGuy(taskId) {
   try {
     const currentTasks = await getAllTasks();
-    const task = currentTasks.find((t) => t.id === taskId);
+    const task = currentTasks.find(/** @param {Task} t */ (t) => t.id === taskId);
 
     if (task) {
       task.list = "tomorrow-guy";
@@ -131,7 +165,7 @@ export async function moveTomorrowTasksToToday() {
   try {
     const currentTasks = await getAllTasks();
     const tomorrowTasks = currentTasks.filter(
-      (task) => task.list === "tomorrow-guy"
+      /** @param {Task} task */ (task) => task.list === "tomorrow-guy"
     );
 
     // Move each tomorrow task to today
@@ -180,9 +214,14 @@ export async function checkAndMoveTasks() {
 }
 
 // Initialize midnight timer
+/** @type {NodeJS.Timeout | null} */
 let midnightTimer = null;
+/** @type {((message: string) => void) | null} */
 let onTasksMoved = null; // Callback for when tasks are moved
 
+/**
+ * @param {(message: string) => void} callback
+ */
 export function setTaskMoveCallback(callback) {
   onTasksMoved = callback;
 }

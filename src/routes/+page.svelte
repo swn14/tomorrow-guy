@@ -1,4 +1,5 @@
 <script>
+  // @ts-check
   import { onMount } from "svelte";
   import {
     tasks,
@@ -16,41 +17,66 @@
     setTaskMoveCallback,
   } from "$lib/stores.js";
 
+  /** @typedef {Object} Task
+   * @property {string} id
+   * @property {string} title
+   * @property {string} description
+   * @property {boolean} completed
+   * @property {number} created_at
+   * @property {number} updated_at
+   * @property {string} list
+   */
+
   let today = new Date();
   let isOnline = $state(navigator.onLine);
+  /** @type {any} */
   let installPrompt = $state(null);
   let isInstalled = $state(false);
   let newTodayTask = $state("");
   let newTomorrowTask = $state("");
+  /** @type {string | null} */
   let notification = $state(null); // For showing move notifications
 
   // Reactive task lists
+  /** @type {Task[]} */
   let todayTasks = $state([]);
+  /** @type {Task[]} */
   let tomorrowTasks = $state([]);
 
   // Subscribe to tasks and split them by list
   $effect(() => {
     const unsubscribe = tasks.subscribe((allTasks) => {
-      todayTasks = allTasks.filter((task) => task.list === "today-guy");
-      tomorrowTasks = allTasks.filter((task) => task.list === "tomorrow-guy");
+      todayTasks = allTasks.filter(/** @param {Task} task */ (task) => task.list === "today-guy");
+      tomorrowTasks = allTasks.filter(/** @param {Task} task */ (task) => task.list === "tomorrow-guy");
     });
     return unsubscribe;
   });
 
   // Get stress level based on incomplete task count
+  /**
+   * @param {Task[]} tasks
+   * @returns {string}
+   */
   function getStressLevel(tasks) {
-    const incompleteTaskCount = tasks.filter((task) => !task.completed).length;
+    const incompleteTaskCount = tasks.filter(/** @param {Task} task */ (task) => !task.completed).length;
     if (incompleteTaskCount === 0) return "happy";
     if (incompleteTaskCount <= 2) return "concerned";
     if (incompleteTaskCount <= 5) return "stressed";
     return "overwhelmed";
   }
 
+  /**
+   * @param {Task} task
+   */
   async function giveItToTomorrowGuy(task) {
     await moveTaskToTomorrowGuy(task.id);
   }
 
   // Get character emoji and style based on stress level
+  /**
+   * @param {string} stressLevel
+   * @returns {{ emoji: string, bgColor: string, textColor: string, pixelArt: string }}
+   */
   function getCharacterData(stressLevel) {
     switch (stressLevel) {
       case "happy":
@@ -235,6 +261,9 @@
     }
   }
 
+  /**
+   * @param {Event} event
+   */
   async function handleAddTodayTask(event) {
     event.preventDefault();
     if (newTodayTask.trim()) {
@@ -243,6 +272,9 @@
     }
   }
 
+  /**
+   * @param {Event} event
+   */
   async function handleAddTomorrowTask(event) {
     event.preventDefault();
     if (newTomorrowTask.trim()) {
@@ -268,6 +300,9 @@
   }
 
   // Show notification helper
+  /**
+   * @param {string} message
+   */
   function showNotification(message) {
     notification = message;
     setTimeout(() => {
@@ -275,25 +310,23 @@
     }, 3000); // Hide after 3 seconds
   }
 
-  onMount(async () => {
+  onMount(() => {
     // Initialize database and stores
-    await initDataStores();
+    initDataStores().then(async () => {
+      // Set up callback for automatic task moves
+      setTaskMoveCallback((/** @param {string} message */ message) => {
+        showNotification(message);
+      });
 
-    // Set up callback for automatic task moves
-    setTaskMoveCallback((message) => {
-      showNotification(message);
+      // Check and move tasks if it's a new day
+      await checkAndMoveTasks();
+
+      // Start the midnight timer for automatic task moving
+      startMidnightTimer();
+
+      // PWA functionality is handled by vite-plugin-pwa
+      // No need to manually import PWA module
     });
-
-    // Check and move tasks if it's a new day
-    await checkAndMoveTasks();
-
-    // Start the midnight timer for automatic task moving
-    startMidnightTimer();
-
-    // Register service worker for PWA
-    if ("serviceWorker" in navigator) {
-      import("/src/pwa.js");
-    }
 
     // Handle online/offline status
     function updateOnlineStatus() {
