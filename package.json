@@ -28,6 +28,6 @@
     "dependencies": {
         "@tailwindcss/vite": "^4.1.11",
         "electric-sql": "^0.12.1",
-        "wa-sqlite": "^0.9.14"
+        "wa-sqlite": "^1.0.0"
     }
 }
