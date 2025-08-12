@@ -46,8 +46,12 @@
   // Subscribe to tasks and split them by list
   $effect(() => {
     const unsubscribe = tasks.subscribe((allTasks) => {
-      todayTasks = allTasks.filter(/** @param {Task} task */ (task) => task.list === "today-guy");
-      tomorrowTasks = allTasks.filter(/** @param {Task} task */ (task) => task.list === "tomorrow-guy");
+      todayTasks = allTasks.filter(
+        /** @param {Task} task */ (task) => task.list === "today-guy"
+      );
+      tomorrowTasks = allTasks.filter(
+        /** @param {Task} task */ (task) => task.list === "tomorrow-guy"
+      );
     });
     return unsubscribe;
   });
@@ -58,7 +62,9 @@
    * @returns {string}
    */
   function getStressLevel(tasks) {
-    const incompleteTaskCount = tasks.filter(/** @param {Task} task */ (task) => !task.completed).length;
+    const incompleteTaskCount = tasks.filter(
+      /** @param {Task} task */ (task) => !task.completed
+    ).length;
     if (incompleteTaskCount === 0) return "happy";
     if (incompleteTaskCount <= 2) return "concerned";
     if (incompleteTaskCount <= 5) return "stressed";

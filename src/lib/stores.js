@@ -27,7 +27,7 @@ import {
  */
 
 // Reactive stores
-export const tasks = writable(/** @type {Task[]} */([]));
+export const tasks = writable(/** @type {Task[]} */ ([]));
 export const isDbReady = writable(false);
 
 let isInitialized = false;
@@ -147,7 +147,9 @@ export async function deleteTask(id) {
 export async function moveTaskToTomorrowGuy(taskId) {
   try {
     const currentTasks = await getAllTasks();
-    const task = currentTasks.find(/** @param {Task} t */ (t) => t.id === taskId);
+    const task = currentTasks.find(
+      /** @param {Task} t */ (t) => t.id === taskId
+    );
 
     if (task) {
       task.list = "tomorrow-guy";
