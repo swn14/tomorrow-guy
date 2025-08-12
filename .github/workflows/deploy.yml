@@ -52,7 +52,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           # Upload the build directory
-          path: "./build"
+          path: "./docs"
 
   # Deployment job (only runs on main branch)
   deploy:
