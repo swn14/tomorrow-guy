@@ -8,6 +8,7 @@ export default defineConfig({
     tailwindcss(),
     sveltekit(),
     VitePWA({
+      outDir: "docs",
       registerType: "autoUpdate",
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest}"],
@@ -20,8 +21,9 @@ export default defineConfig({
         theme_color: "#667eea",
         background_color: "#ffffff",
         display: "standalone",
-        scope: "/",
-        start_url: "/",
+        scope: process.env.NODE_ENV === "production" ? "/tomorrow-guy/" : "/",
+        start_url:
+          process.env.NODE_ENV === "production" ? "/tomorrow-guy/" : "/",
         icons: [
           {
             src: "pwa-192x192.png",

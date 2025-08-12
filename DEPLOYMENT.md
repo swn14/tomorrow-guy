@@ -42,6 +42,8 @@ This repository includes comprehensive GitHub Actions workflows for building, te
 3. Under "Source", select "GitHub Actions"
 4. Save the settings
 
+**Important**: The app is configured with the correct base path (`/tomorrow-guy/`) and includes a `.nojekyll` file to prevent Jekyll processing conflicts.
+
 ### 2. Repository Permissions (if needed)
 
 The workflows include the necessary permissions, but if you encounter issues:

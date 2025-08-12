@@ -6,12 +6,15 @@ const config = {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({
-      pages: "build",
-      assets: "build",
+      pages: "docs",
+      assets: "docs",
       fallback: "index.html",
       precompress: false,
       strict: true,
     }),
+    paths: {
+      base: process.env.NODE_ENV === "production" ? "/tomorrow-guy" : "",
+    },
   },
 };
 

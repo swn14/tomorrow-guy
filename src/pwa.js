@@ -3,17 +3,24 @@ if ("serviceWorker" in navigator) {
   // The service worker is automatically registered by vite-plugin-pwa
   // We just need to handle the update logic here
 
+  // @ts-check
+  // PWA functionality
+  let deferredPrompt;
+
+  // Handle PWA install prompt
   window.addEventListener("beforeinstallprompt", (e) => {
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
+    // Prevent the default browser install prompt
     e.preventDefault();
-    // Stash the event so it can be triggered later
-    window.deferredPrompt = e;
+
+    // Store the event for later use
+    deferredPrompt = e;
+    /** @type {any} */ (window).deferredPrompt = e;
   });
 
   // Listen for app installed
   window.addEventListener("appinstalled", () => {
     console.log("PWA was installed");
-    window.deferredPrompt = null;
+    /** @type {any} */ (window).deferredPrompt = null;
   });
 
   // Register SW update listener

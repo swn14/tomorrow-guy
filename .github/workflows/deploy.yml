@@ -43,6 +43,9 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Create .nojekyll file
+        run: touch ./docs/.nojekyll
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
         if: github.ref == 'refs/heads/main'
@@ -52,7 +55,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         with:
           # Upload the build directory
-          path: "./build"
+          path: "./docs"
 
   # Deployment job (only runs on main branch)
   deploy:
