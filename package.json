@@ -26,7 +26,7 @@
     },
     "type": "module",
     "dependencies": {
-        "@tailwindcss/vite": "^4.1.11",
+        "@tailwindcss/vite": "^4.1.12",
         "electric-sql": "^0.12.1",
         "wa-sqlite": "^1.0.0"
     }
